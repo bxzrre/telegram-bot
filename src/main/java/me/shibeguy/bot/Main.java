@@ -2,6 +2,7 @@ package me.shibeguy.bot;
 
 import com.jtelegram.api.TelegramBot;
 import com.jtelegram.api.TelegramBotRegistry;
+import com.jtelegram.api.chat.id.ChatId;
 import com.jtelegram.api.commands.Command;
 import com.jtelegram.api.requests.message.send.SendText;
 import com.jtelegram.api.update.PollingUpdateProvider;
@@ -28,6 +29,7 @@ public class Main {
             }
             this.telegramBot = bot;
             new BotRegistry(this);
+            updateMessage();
         });
     }
 
@@ -44,6 +46,15 @@ public class Main {
                 SendText.builder()
                 .chatId(command.getChat().getChatId())
                 .text(string)
+                .build()
+        );
+    }
+
+    private void updateMessage() {
+        telegramBot.perform(
+                SendText.builder()
+                .chatId(ChatId.of("@shitposters"))
+                .text("bot just updated! \nor maybe i just died\n\ni probably just died...")
                 .build()
         );
     }
