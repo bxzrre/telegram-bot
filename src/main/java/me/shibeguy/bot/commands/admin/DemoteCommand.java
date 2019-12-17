@@ -3,6 +3,7 @@ package me.shibeguy.bot.commands.admin;
 import com.jtelegram.api.chat.Chat;
 import com.jtelegram.api.chat.ChatMemberStatus;
 import com.jtelegram.api.chat.id.ChatId;
+import com.jtelegram.api.chat.id.StringChatId;
 import com.jtelegram.api.commands.Command;
 import com.jtelegram.api.commands.CommandHandler;
 import com.jtelegram.api.events.message.TextMessageEvent;
@@ -52,6 +53,7 @@ public class DemoteCommand implements CommandHandler {
                     }
 
                     if (isAdmin.get()) {
+                        StringChatId idToDemote = ChatId.of(command.getArgsAsText());
                         User toDemote = event.getMessage().getReplyToMessage().getSender();
 
                         demote(event.getMessage().getChat(), toDemote.getId());
