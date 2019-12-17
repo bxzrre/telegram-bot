@@ -46,27 +46,31 @@ public class DemoteCommand implements CommandHandler {
 
         registry.getMain().getTelegramBot().perform(
                 GetChatMember.builder()
-                .chatId(event.getMessage().getChat().getChatId())
-                .userId(command.getSender().getId())
-                .callback(chatMember -> {
-                    if (chatMember.getStatus().ordinal() <= ChatMemberStatus.ADMINISTRATOR.ordinal()) {
-                        isAdmin.set(true);
-                    }
+                        .chatId(event.getMessage().getChat().getChatId())
+                        .userId(command.getSender().getId())
+                        .callback(chatMember -> {
+                            if (chatMember.getStatus().ordinal() <= ChatMemberStatus.ADMINISTRATOR.ordinal()) {
+                                isAdmin.set(true);
+                            }
 
-                    if (isAdmin.get()) {
-                        StringChatId idToDemote = ChatId.of(command.getArgsAsText());
-                        User toDemote = event.getMessage().getReplyToMessage().getSender();
+                            if (isAdmin.get()) {
+                                User toDemote = event.getMessage().getReplyToMessage().getSender();
 
-                        demote(event.getMessage().getChat(), toDemote.getId());
-                        registry.getMain().reply(event, SUCCESS[random.nextInt(SUCCESS.length - 1)]);
-                        return;
-                    } else {
-                        registry.getMain().reply(event, FAILED[random.nextInt(FAILED.length - 1)]);
-                        return;
-                    }
-                }).build()
-        );
-    }
+                                // Check to see if the user isn't already admin
+                                registry.getMain().getTelegramBot().perform(
+                                        GetChatMember.builder().chatId(event.getMessage().getChat().getChatId()).userId(toDemote.getId()).callback(chatMember1 -> {
+                                            if (chatMember1.getStatus().ordinal() >= ChatMemberStatus.ADMINISTRATOR.ordinal()) {
+                                                registry.getMain().reply(event, "user is not an admin");
+                                            } else {
+                                                demote(event.getMessage().getChat(), toDemote.getId());
+                                                registry.getMain().reply(event, SUCCESS[random.nextInt(SUCCESS.length - 1)]);
+                                            }
+                                        }).build());
+                            } else {
+                                registry.getMain().reply(event, FAILED[random.nextInt(FAILED.length - 1)]);
+                            }
+                        }).build());
+        }
 
     @Override
     public boolean test(TextMessageEvent event, Command command) {

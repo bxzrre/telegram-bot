@@ -73,7 +73,7 @@ public class Main {
                 SendText.builder()
                 .chatId(ChatId.of("@shitposters"))
                 .text("bot just updated! \nor maybe i just died\n\ni probably just died...")
-                .build()
+                        .build()
         );
     }
 }

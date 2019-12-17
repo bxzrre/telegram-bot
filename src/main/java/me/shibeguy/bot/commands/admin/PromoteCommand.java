@@ -9,6 +9,7 @@ import com.jtelegram.api.commands.CommandHandler;
 import com.jtelegram.api.events.message.TextMessageEvent;
 import com.jtelegram.api.ex.TelegramException;
 import com.jtelegram.api.message.Message;
+import com.jtelegram.api.requests.chat.GetChat;
 import com.jtelegram.api.requests.chat.GetChatMember;
 import com.jtelegram.api.requests.chat.admin.PromoteChatMember;
 import com.jtelegram.api.user.User;
@@ -59,15 +60,23 @@ public class PromoteCommand implements CommandHandler {
                             if (isAdmin.get()) {
                                 User toPromote = event.getMessage().getReplyToMessage().getSender();
 
-                                promote(event.getMessage().getChat(), toPromote);
-                                registry.getMain().reply(event, SUCCESS[random.nextInt(SUCCESS.length - 1)]);
-                                return;
+
+                                // Check to see if the user is already admin
+                                registry.getMain().getTelegramBot().perform(
+                                        GetChatMember.builder().chatId(event.getMessage().getChat().getChatId()).userId(toPromote.getId()).callback(chatMember1 -> {
+                                            if (chatMember1.getStatus().ordinal() <= ChatMemberStatus.ADMINISTRATOR.ordinal()) {
+                                                registry.getMain().reply(event, "user is already an admin");
+                                                return;
+                                            } else {
+                                                promote(event.getMessage().getChat(), toPromote);
+                                                registry.getMain().reply(event, SUCCESS[random.nextInt(SUCCESS.length - 1)]);
+                                                return;
+                                            }
+                                        }).build());
                             } else {
                                 registry.getMain().reply(event, FAILED[random.nextInt(FAILED.length - 1)]);
-                                return;
                             }
-                        })
-                        .build());
+                        }).build());
     }
 
     @Override
