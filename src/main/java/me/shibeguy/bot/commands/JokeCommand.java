@@ -27,4 +27,13 @@ public class JokeCommand implements CommandHandler {
     public void onCommand(TextMessageEvent event, Command command) {
         registry.getMain().reply(event, JOKES[random.nextInt(JOKES.length - 1)]);
     }
+
+    @Override
+    public boolean test(TextMessageEvent event, Command command) {
+        if (command.getBaseCommand().equalsIgnoreCase(commandName)) {
+            onCommand(event, command);
+            return true;
+        }
+        return false;
+    }
 }
