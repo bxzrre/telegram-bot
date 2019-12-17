@@ -27,15 +27,15 @@ public class PromoteCommand implements CommandHandler {
         this.registry = registry;
     }
 
-    private final String[] SUCCESS = new String[] {
+    private final String[] SUCCESS = new String[]{
             "YOU ARE FUCKING HAVE PRIVILEGE SAR???",
             "i aM FUCKING GRANT PRIVILEGE TO SAR",
             "he is fucking have privilege now sar?",
             "I AM FUCKING PROMOTE STUPD NEGOR FOR YOU SAR",
             "YOU ARE FUCKING PROMOTE REART SARRRRRR"
-};
+    };
 
-    private final String[] FAILED = new String[] {
+    private final String[] FAILED = new String[]{
             "You are think im stupid like negor sar  ?  ? ??",
             "YOU ARE FUCKING NOT ADMIN?!?!?!",
             "you are try to promote but you are not admin sar?",
@@ -47,33 +47,27 @@ public class PromoteCommand implements CommandHandler {
         AtomicBoolean isAdmin = new AtomicBoolean(false);
         SecureRandom random = new SecureRandom();
 
-        System.out.println("1");
-
         registry.getMain().getTelegramBot().perform(
                 GetChatMember.builder()
-                .chatId(event.getMessage().getChat().getChatId())
-                .userId(command.getSender().getId())
-                .callback(chatMember -> {
-                    if (chatMember.getStatus().ordinal() <= ChatMemberStatus.ADMINISTRATOR.ordinal() || chatMember.getStatus().ordinal() <= ChatMemberStatus.CREATOR.ordinal()) {
-                        isAdmin.set(true);
-                        System.out.println("2");
-                    }
+                        .chatId(event.getMessage().getChat().getChatId())
+                        .userId(command.getSender().getId())
+                        .callback(chatMember -> {
+                            if (chatMember.getStatus().ordinal() <= ChatMemberStatus.ADMINISTRATOR.ordinal() || chatMember.getStatus().ordinal() <= ChatMemberStatus.CREATOR.ordinal()) {
+                                isAdmin.set(true);
+                            }
 
-                    if (isAdmin.get()) {
-                        System.out.println("3");
-                        User toPromote = event.getMessage().getReplyToMessage().getSender();
+                            if (isAdmin.get()) {
+                                User toPromote = event.getMessage().getReplyToMessage().getSender();
 
-                        promote(event.getMessage().getChat(), toPromote);
-                        registry.getMain().reply(event, SUCCESS[random.nextInt(SUCCESS.length - 1)]);
-                        System.out.println("4");
-                        return;
-                    } else {
-                        registry.getMain().reply(event, FAILED[random.nextInt(FAILED.length - 1)]);
-                        System.out.println("5");
-                        return;
-                    }
-                })
-                .build());
+                                promote(event.getMessage().getChat(), toPromote);
+                                registry.getMain().reply(event, SUCCESS[random.nextInt(SUCCESS.length - 1)]);
+                                return;
+                            } else {
+                                registry.getMain().reply(event, FAILED[random.nextInt(FAILED.length - 1)]);
+                                return;
+                            }
+                        })
+                        .build());
     }
 
     @Override
@@ -86,31 +80,21 @@ public class PromoteCommand implements CommandHandler {
     }
 
     void promote(Chat chat, User user) {
-        System.out.println("this is called");
         registry.getMain().getTelegramBot().perform(
                 PromoteChatMember.builder()
-                .chatId(chat.getChatId())
-                .userId(user.getId())
-                .canEditMessages(true)
-                .canDeleteMessages(true)
-                .canChangeInfo(true)
-                .canInviteUsers(true)
-                .canPinMessages(true)
-                .canPostMessages(true)
-                .canPromoteMembers(true)
-                .canRestrictMembers(true)
-                .errorHandler(e -> {
-                    if (e instanceof TelegramException) {
-                        System.out.println("Something's wrong");
-                        e.printStackTrace();
-                        return;
-                    }
-                    System.out.println("Telegram returned an error!");
-                })
-                .build()
+                        .chatId(chat.getChatId())
+                        .userId(user.getId())
+                        .canChangeInfo(true)
+                        .canDeleteMessages(true)
+                        .canRestrictMembers(true)
+                        .canPinMessages(true)
+                        .canInviteUsers(true)
+                        .canPromoteMembers(true)
+                        .errorHandler(e -> {
+                            System.out.println("uh oh, something's wrong");
+                            e.printStackTrace();
+                        }).build()
         );
-
-
-        System.out.println("finished");
     }
 }
+
