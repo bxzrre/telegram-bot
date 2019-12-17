@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DemoteCommand implements CommandHandler {
     private final BotRegistry registry;
+    private final String commandName = "demote";
 
     public DemoteCommand(BotRegistry registry) {
         this.registry = registry;
@@ -66,6 +67,16 @@ public class DemoteCommand implements CommandHandler {
                 }).build()
         );
     }
+
+    @Override
+    public boolean test(TextMessageEvent event, Command command) {
+        if (command.getBaseCommand().equalsIgnoreCase(commandName)) {
+            onCommand(event, command);
+            return true;
+        }
+        return false;
+    }
+
 
     void demote(Chat chat, long userId) {
         registry.getMain().getTelegramBot().perform(

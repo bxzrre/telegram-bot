@@ -4,8 +4,10 @@ import me.shibeguy.bot.Main;
 import me.shibeguy.bot.commands.CopypastaCommand;
 import me.shibeguy.bot.commands.DefineCommand;
 import me.shibeguy.bot.commands.JokeCommand;
+import me.shibeguy.bot.commands.admin.BanCommand;
 import me.shibeguy.bot.commands.admin.DemoteCommand;
 import me.shibeguy.bot.commands.admin.PromoteCommand;
+import me.shibeguy.bot.commands.admin.UnbanCommand;
 
 public class BotRegistry {
 
@@ -19,6 +21,8 @@ public class BotRegistry {
         main.getTelegramBot().getCommandRegistry().registerCommand(new JokeCommand(this));
         main.getTelegramBot().getCommandRegistry().registerCommand(new CopypastaCommand(this));
         main.getTelegramBot().getCommandRegistry().registerCommand(new DemoteCommand(this));
+        main.getTelegramBot().getCommandRegistry().registerCommand(new BanCommand(this));
+        main.getTelegramBot().getCommandRegistry().registerCommand(new UnbanCommand(this));
     }
 
     public Main getMain() {

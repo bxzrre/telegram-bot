@@ -6,29 +6,24 @@ import com.jtelegram.api.commands.Command;
 import com.jtelegram.api.commands.CommandHandler;
 import com.jtelegram.api.events.message.TextMessageEvent;
 import com.jtelegram.api.requests.chat.GetChatMember;
-import com.jtelegram.api.requests.chat.admin.KickChatMember;
-import com.jtelegram.api.requests.chat.admin.RestrictChatMember;
+import com.jtelegram.api.requests.chat.admin.UnbanChatMember;
 import com.jtelegram.api.user.User;
 import me.shibeguy.bot.handler.BotRegistry;
 
 import java.security.SecureRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class BanCommand implements CommandHandler {
+public class UnbanCommand implements CommandHandler {
 
-    private final String commandName = "ban";
-    private BotRegistry registry;
-
-    public BanCommand(BotRegistry registry) {
-        this.registry = registry;
-    }
+    private final BotRegistry registry;
+    private final String commandName = "unban";
 
     private final String[] SUCCESS = new String[] {
-            "GET FUCKING DESTROYED NIGGA",
-            "NAE-NAED",
-            "I AM FUCKING BAN RAERT FROM CHAT",
-            "Hello, I'm Shibe The Bot and you're banned from this channel retard.",
-            "L"
+            "i am unban negor for you sar??",
+            "FUCKING RATAD UNBANNED NOW NIGA",
+            "HE IS FUCKING CRYYYYYYYYYYY",
+            "shibe the bot unbanned this retard",
+            "ok"
     };
 
     private final String[] FAILED = new String[]{
@@ -38,6 +33,10 @@ public class BanCommand implements CommandHandler {
             "YOU THINK IM FUCKING IDIOATWE SAR? ?,"
     };
 
+    public UnbanCommand(BotRegistry registry) {
+        this.registry = registry;
+    }
+
     @Override
     public void onCommand(TextMessageEvent event, Command command) {
         AtomicBoolean isAdmin = new AtomicBoolean();
@@ -46,22 +45,22 @@ public class BanCommand implements CommandHandler {
 
         registry.getMain().getTelegramBot().perform(
                 GetChatMember.builder()
-                .chatId(event.getMessage().getChat().getChatId())
-                .userId(command.getSender().getId())
-                .callback(chatMember -> {
-                    if (chatMember.getStatus().ordinal() <= ChatMemberStatus.ADMINISTRATOR.ordinal()) {
-                        isAdmin.set(true);
-                    }
+                        .chatId(event.getMessage().getChat().getChatId())
+                        .userId(command.getSender().getId())
+                        .callback(chatMember -> {
+                            if (chatMember.getStatus().ordinal() <= ChatMemberStatus.ADMINISTRATOR.ordinal()) {
+                                isAdmin.set(true);
+                            }
 
-                    if (isAdmin.get()) {
-                        User target = event.getMessage().getReplyToMessage().getSender();
+                            if (isAdmin.get()) {
+                                User target = event.getMessage().getReplyToMessage().getSender();
 
-                        ban(event.getMessage().getChat(), target.getId());
-                        registry.getMain().reply(event, SUCCESS[random.nextInt(SUCCESS.length - 1)]);
-                    } else {
-                        registry.getMain().reply(event, FAILED[random.nextInt(FAILED.length - 1)]);
-                    }
-                }).build()
+                                unban(event.getMessage().getChat(), target.getId());
+                                registry.getMain().reply(event, SUCCESS[random.nextInt(SUCCESS.length - 1)]);
+                            } else {
+                                registry.getMain().reply(event, FAILED[random.nextInt(FAILED.length - 1)]);
+                            }
+                        }).build()
         );
     }
 
@@ -74,9 +73,9 @@ public class BanCommand implements CommandHandler {
         return false;
     }
 
-    void ban(Chat chat, long userId) {
+    void unban(Chat chat, long userId) {
         registry.getMain().getTelegramBot().perform(
-                KickChatMember.builder()
+                UnbanChatMember.builder()
                 .chatId(chat.getChatId())
                 .userId(userId)
                 .build()
