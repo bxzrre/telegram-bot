@@ -2,17 +2,25 @@ package me.shibeguy.bot;
 
 import com.jtelegram.api.TelegramBot;
 import com.jtelegram.api.TelegramBotRegistry;
+import com.jtelegram.api.chat.Chat;
+import com.jtelegram.api.chat.ChatMemberStatus;
 import com.jtelegram.api.chat.id.ChatId;
-import com.jtelegram.api.commands.Command;
+import com.jtelegram.api.events.message.TextMessageEvent;
+import com.jtelegram.api.requests.chat.GetChatMember;
 import com.jtelegram.api.requests.message.send.SendText;
 import com.jtelegram.api.update.PollingUpdateProvider;
 import com.jtelegram.api.update.UpdateType;
+import com.jtelegram.api.user.User;
 import me.shibeguy.bot.handler.BotRegistry;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Main {
 
     private final TelegramBotRegistry registry;
     private TelegramBot telegramBot;
+
+    private AtomicBoolean isAdmin = new AtomicBoolean(false);
 
     public Main(String key) {
         this.registry = TelegramBotRegistry.builder()
@@ -41,11 +49,21 @@ public class Main {
         return telegramBot;
     }
 
-    public void sendMessage(Command command, String string) {
+    public void send(TextMessageEvent event, String string) {
         telegramBot.perform(
                 SendText.builder()
-                .chatId(command.getChat().getChatId())
+                .chatId(event.getMessage().getChat().getChatId())
                 .text(string)
+                .build()
+        );
+    }
+
+    public void reply(TextMessageEvent event, String string) {
+        telegramBot.perform(
+                SendText.builder()
+                .chatId(event.getMessage().getChat().getChatId())
+                .text(string)
+                .replyToMessageID(event.getMessage().getMessageId())
                 .build()
         );
     }
