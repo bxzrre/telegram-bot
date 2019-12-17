@@ -44,7 +44,7 @@ public class DemoteCommand implements CommandHandler {
         AtomicBoolean isAdmin = new AtomicBoolean(false);
         SecureRandom random = new SecureRandom();
 
-        registry.getMain().getTelegramBot().perform(
+        registry.getMain().getBot().perform(
                 GetChatMember.builder()
                         .chatId(event.getMessage().getChat().getChatId())
                         .userId(command.getSender().getId())
@@ -57,7 +57,7 @@ public class DemoteCommand implements CommandHandler {
                                 User toDemote = event.getMessage().getReplyToMessage().getSender();
 
                                 // Check to see if the user isn't already admin
-                                registry.getMain().getTelegramBot().perform(
+                                registry.getMain().getBot().perform(
                                         GetChatMember.builder().chatId(event.getMessage().getChat().getChatId()).userId(toDemote.getId()).callback(chatMember1 -> {
                                             if (chatMember1.getStatus().ordinal() >= ChatMemberStatus.ADMINISTRATOR.ordinal()) {
                                                 registry.getMain().reply(event, "user is not an admin");
@@ -83,7 +83,7 @@ public class DemoteCommand implements CommandHandler {
 
 
     void demote(Chat chat, long userId) {
-        registry.getMain().getTelegramBot().perform(
+        registry.getMain().getBot().perform(
                 PromoteChatMember.builder()
                         .chatId(chat.getChatId())
                         .userId(userId)

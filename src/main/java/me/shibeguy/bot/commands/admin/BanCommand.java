@@ -44,7 +44,7 @@ public class BanCommand implements CommandHandler {
         SecureRandom random = new SecureRandom();
 
 
-        registry.getMain().getTelegramBot().perform(
+        registry.getMain().getBot().perform(
                 GetChatMember.builder()
                 .chatId(event.getMessage().getChat().getChatId())
                 .userId(command.getSender().getId())
@@ -75,7 +75,7 @@ public class BanCommand implements CommandHandler {
     }
 
     void ban(Chat chat, long userId) {
-        registry.getMain().getTelegramBot().perform(
+        registry.getMain().getBot().perform(
                 KickChatMember.builder()
                 .chatId(chat.getChatId())
                 .userId(userId)

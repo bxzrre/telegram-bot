@@ -16,13 +16,13 @@ public class BotRegistry {
     public BotRegistry(Main main) {
         this.main = main;
 
-        main.getTelegramBot().getCommandRegistry().registerCommand(new DefineCommand(this));
-        main.getTelegramBot().getCommandRegistry().registerCommand(new PromoteCommand(this));
-        main.getTelegramBot().getCommandRegistry().registerCommand(new JokeCommand(this));
-        main.getTelegramBot().getCommandRegistry().registerCommand(new CopypastaCommand(this));
-        main.getTelegramBot().getCommandRegistry().registerCommand(new DemoteCommand(this));
-        main.getTelegramBot().getCommandRegistry().registerCommand(new BanCommand(this));
-        main.getTelegramBot().getCommandRegistry().registerCommand(new UnbanCommand(this));
+        main.getBot().getCommandRegistry().registerCommand(new DefineCommand(this));
+        main.getBot().getCommandRegistry().registerCommand(new PromoteCommand(this));
+        main.getBot().getCommandRegistry().registerCommand(new JokeCommand(this));
+        main.getBot().getCommandRegistry().registerCommand(new CopypastaCommand(this));
+        main.getBot().getCommandRegistry().registerCommand(new DemoteCommand(this));
+        main.getBot().getCommandRegistry().registerCommand(new BanCommand(this));
+        main.getBot().getCommandRegistry().registerCommand(new UnbanCommand(this));
     }
 
     public Main getMain() {

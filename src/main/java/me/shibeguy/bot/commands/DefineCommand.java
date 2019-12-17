@@ -24,7 +24,7 @@ public class DefineCommand implements CommandHandler {
     public void onCommand(TextMessageEvent event, Command command) {
         try {
             if (command.getArgsAsText().equalsIgnoreCase("madaidan") || command.getArgsAsText().equalsIgnoreCase("aidan")) {
-                registry.getMain().send(event, "Definition of madaidan: Some asshat who thinks he's the best.");
+                registry.getMain().reply(event, "Definition of madaidan: Some asshat who thinks he's the best.");
                 return;
             }
 
@@ -35,15 +35,15 @@ public class DefineCommand implements CommandHandler {
             JSONObject object = new JSONObject(response.getBody());
 
             if (object.getJSONArray("list").length() == 0) {
-                registry.getMain().send(event, "No definition found for " + command.getArgsAsText() + "!");
+                registry.getMain().reply(event, "No definition found for " + command.getArgsAsText() + "!");
                 return;
             }
 
             JSONObject definition = object.getJSONArray("list").getJSONObject(0);
-            registry.getMain().send(event, "Definition of " + command.getArgsAsText() + ": " + definition.getString("definition"));
-            registry.getMain().send(event, definition.getString("example"));
+            registry.getMain().reply(event, "Definition of " + command.getArgsAsText() + ": " + definition.getString("definition"));
+            registry.getMain().reply(event, definition.getString("example"));
         } catch (UnirestException ex) {
-            registry.getMain().send(event, "Failed to find the definition of " + command.getArgsAsText());
+            registry.getMain().reply(event, "Failed to find the definition of " + command.getArgsAsText());
             ex.printStackTrace();
         }
     }

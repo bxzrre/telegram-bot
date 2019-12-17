@@ -48,7 +48,7 @@ public class PromoteCommand implements CommandHandler {
         AtomicBoolean isAdmin = new AtomicBoolean(false);
         SecureRandom random = new SecureRandom();
 
-        registry.getMain().getTelegramBot().perform(
+        registry.getMain().getBot().perform(
                 GetChatMember.builder()
                         .chatId(event.getMessage().getChat().getChatId())
                         .userId(command.getSender().getId())
@@ -62,7 +62,7 @@ public class PromoteCommand implements CommandHandler {
 
 
                                 // Check to see if the user is already admin
-                                registry.getMain().getTelegramBot().perform(
+                                registry.getMain().getBot().perform(
                                         GetChatMember.builder().chatId(event.getMessage().getChat().getChatId()).userId(toPromote.getId()).callback(chatMember1 -> {
                                             if (chatMember1.getStatus().ordinal() <= ChatMemberStatus.ADMINISTRATOR.ordinal()) {
                                                 registry.getMain().reply(event, "user is already an admin");
@@ -89,7 +89,7 @@ public class PromoteCommand implements CommandHandler {
     }
 
     void promote(Chat chat, User user) {
-        registry.getMain().getTelegramBot().perform(
+        registry.getMain().getBot().perform(
                 PromoteChatMember.builder()
                         .chatId(chat.getChatId())
                         .userId(user.getId())

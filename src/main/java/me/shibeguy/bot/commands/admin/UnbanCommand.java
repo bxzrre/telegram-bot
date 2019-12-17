@@ -43,7 +43,7 @@ public class UnbanCommand implements CommandHandler {
         SecureRandom random = new SecureRandom();
 
 
-        registry.getMain().getTelegramBot().perform(
+        registry.getMain().getBot().perform(
                 GetChatMember.builder()
                         .chatId(event.getMessage().getChat().getChatId())
                         .userId(command.getSender().getId())
@@ -74,7 +74,7 @@ public class UnbanCommand implements CommandHandler {
     }
 
     void unban(Chat chat, long userId) {
-        registry.getMain().getTelegramBot().perform(
+        registry.getMain().getBot().perform(
                 UnbanChatMember.builder()
                 .chatId(chat.getChatId())
                 .userId(userId)
