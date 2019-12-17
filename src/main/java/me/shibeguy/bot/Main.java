@@ -2,6 +2,7 @@ package me.shibeguy.bot;
 
 import com.jtelegram.api.TelegramBot;
 import com.jtelegram.api.TelegramBotRegistry;
+import com.jtelegram.api.chat.id.ChatId;
 import com.jtelegram.api.events.message.TextMessageEvent;
 import com.jtelegram.api.requests.framework.TelegramRequest;
 import com.jtelegram.api.requests.message.send.SendText;
@@ -26,11 +27,16 @@ public class Main {
 
             this.telegramBot = bot;
             new BotRegistry(this);
+            messageShitpostersOnUpdate();
         });
     }
 
     public void reply(TextMessageEvent event, String message) {
         telegramBot.perform((TelegramRequest) SendText.builder().chatId(event.getMessage().getChat().getChatId()).text(message).replyToMessageID(event.getMessage().getMessageId()));
+    }
+
+    private void messageShitpostersOnUpdate() {
+        telegramBot.perform(SendText.builder().chatId(ChatId.of("@Shitposters")).text("Bot just updated! \nOr maybe it just died...\n\nYeah, it probably just died.").build());
     }
 
     public static void main(String[] args) {
